@@ -32,4 +32,6 @@ fclean:	clean
 
 re:	fclean all
 
+tests_run: fclean all
+
 .PHONY:	all clean fclean re
