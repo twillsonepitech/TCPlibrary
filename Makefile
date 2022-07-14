@@ -70,12 +70,14 @@ re:	fclean all
 debug:	CFLAGS	+=	-g3
 debug:	re
 
+tests_run:	CFLAGS	+=	${TESTS_LIBS}
 tests_run:	${TESTS_OBJS}
 	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
 	./${TESTS_BIN_NAME}
 	${RM} ${TESTS_OBJS}
 	${RM} ${TESTS_BIN_NAME}
 
+valgrind:	CFLAGS	+=	${TESTS_LIBS}
 valgrind:	CFLAGS	+=	-g3
 valgrind:	${TESTS_OBJS}
 	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
