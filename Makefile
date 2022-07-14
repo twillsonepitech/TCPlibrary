@@ -18,8 +18,7 @@ STATIC_NAME	=	tcp.a
 BASIC_NAME	=	a.out
 LIBS	=	# can be [-lm -> math], [-lpthread -> pthreads]...
 
-TESTS_BIN	:=	*.gcno
-TESTS_BIN	+=	*.gcda
+TESTS_BIN	:=	*.gc*
 TESTS_BIN_NAME	:=	unit_tests
 TESTS_LIBS	:=	-lcriterion --coverage
 
@@ -62,7 +61,8 @@ fclean:	clean
 	${RM} ${STATIC_NAME}
 	${RM} ${BASIC_NAME}
 	${RM} ${TESTS_OBJS}
-	${RM} ${TESTS_BIN}
+	${RM} ./srcs/${TESTS_BIN}
+	${RM} ./tests/${TESTS_BIN}
 	${RM} ${TESTS_BIN_NAME}
 
 re:	fclean all
@@ -70,14 +70,12 @@ re:	fclean all
 debug:	CFLAGS	+=	-g3
 debug:	re
 
-tests_run:	CFLAGS	+=	${TESTS_LIBS}
 tests_run:	${TESTS_OBJS}
 	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
 	./${TESTS_BIN_NAME}
 	${RM} ${TESTS_OBJS}
 	${RM} ${TESTS_BIN_NAME}
 
-valgrind:	CFLAGS	+=	${TESTS_LIBS}
 valgrind:	CFLAGS	+=	-g3
 valgrind:	${TESTS_OBJS}
 	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
