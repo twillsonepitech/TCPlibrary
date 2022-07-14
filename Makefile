@@ -12,7 +12,7 @@ CFLAGS	+=	-W -Wextra -Werror
 
 RM	?=	rm -rf
 
-SRCS	=	main.c				\
+SRCS	=	srcs/main.c				\
 
 OBJS	=	${SRCS:.c=.o}
 
