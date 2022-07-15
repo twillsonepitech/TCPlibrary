@@ -23,7 +23,7 @@ TESTS_BIN_NAME	:=	unit_tests
 TESTS_LIBS	:=	-L./criterion/lib/ -lcriterion --coverage
 TESTS_INC	:=	-I./criterion/include/
 
-CPPFLAGS	+=	-Wall -Wextra -iquote ./includes
+CPPFLAGS	+=	-Wall -Wextra -iquote ./includes -I./criterion/include/
 
 CFLAGS	+=	-fPIC -pedantic
 
