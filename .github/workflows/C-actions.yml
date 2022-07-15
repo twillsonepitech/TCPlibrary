@@ -34,3 +34,5 @@ jobs:
         run: make re
       - name: make tests
         run: make tests_run
+      - name: make valgrind
+        run: make valgrind
