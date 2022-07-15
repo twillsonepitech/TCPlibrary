@@ -6,7 +6,14 @@
 #define SUCCESS_PORT    4242
 #define FAILURE_PORT_1  1023
 #define FAILURE_PORT_2  65539
-#define SOCKET_FD       3 + 6
+
+#ifdef WIN32
+    #define FD_USED_CRITERION   7
+#else
+    #define FD_USED_CRITERION   6
+#endif
+
+#define SOCKET_FD       3 + FD_USED_CRITERION
 
 /**
  *  To execute tests, try `make tests_run 2> logs.out > logs.out ; cat logs.out`
