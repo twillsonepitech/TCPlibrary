@@ -27,9 +27,9 @@ jobs:
 
       - name: Setting up Criterion
         run: |
-          add-apt-repository ppa:snaipewastaken/ppa
-          apt-get update
-          apt-get install criterion-dev
+          sudo add-apt-repository ppa:snaipewastaken/ppa
+          sudo apt-get update
+          sudo apt-get install criterion-dev
       - name: make
         run: make
       - name: make re
