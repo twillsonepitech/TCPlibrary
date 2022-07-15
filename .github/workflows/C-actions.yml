@@ -7,6 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
+    branches: [ "actions-criterion" ]
   pull_request:
     branches: [ "master" ]
 
@@ -25,11 +26,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
+      - name: Setting up Criterion
+        run: |
+          wget https://github.com/Snaipe/Criterion/releases/download/v2.3.3/criterion-v2.3.3-linux-x86_64.tar.bz2
+          tar xf criterion-v2.3.3-linux-x86_64.tar.bz2
+          mv criterion-v2.3.3 criterion
       - name: make
         run: make
-
-      # Runs a set of commands using the runners shell
       - name: make re
         run: make re
       - name: make tests
