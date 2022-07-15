@@ -22,7 +22,7 @@ TESTS_BIN	:=	*.gc*
 TESTS_BIN_NAME	:=	unit_tests
 TESTS_LIBS	:=	-lcriterion --coverage
 
-CPPFLAGS	+=	-Wall -Wextra -iquote ./includes -I./criterion/include/
+CPPFLAGS	+=	-Wall -Wextra -iquote ./includes
 
 CFLAGS	+=	-fPIC -pedantic
 
