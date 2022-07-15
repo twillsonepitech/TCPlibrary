@@ -20,8 +20,7 @@ LIBS	=	# can be [-lm -> math], [-lpthread -> pthreads]...
 
 TESTS_BIN	:=	*.gc*
 TESTS_BIN_NAME	:=	unit_tests
-TESTS_LIBS	:=	-L./criterion/lib/ -lcriterion --coverage
-TESTS_INC	:=	-I./criterion/include/
+TESTS_LIBS	:=	-lcriterion --coverage
 
 CPPFLAGS	+=	-Wall -Wextra -iquote ./includes -I./criterion/include/
 
@@ -72,14 +71,14 @@ debug:	CFLAGS	+=	-g3
 debug:	re
 
 tests_run:	${TESTS_OBJS}
-	${CC} ${TESTS_INC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
+	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
 	./${TESTS_BIN_NAME}
 	${RM} ${TESTS_OBJS}
 	${RM} ${TESTS_BIN_NAME}
 
 valgrind:	CFLAGS	+=	-g3
 valgrind:	${TESTS_OBJS}
-	${CC} ${TESTS_INC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
+	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
 	valgrind --trace-children=yes --quiet ./${TESTS_BIN_NAME}
 	${RM} ${TESTS_OBJS}
 	${RM} ${TESTS_BIN_NAME}

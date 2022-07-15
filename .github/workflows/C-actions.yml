@@ -27,12 +27,9 @@ jobs:
 
       - name: Setting up Criterion
         run: |
-          wget https://github.com/Snaipe/Criterion/releases/download/v2.3.3/criterion-v2.3.3-linux-x86_64.tar.bz2
-          echo "Criterion downloaded."
-          tar xvf criterion-v2.3.3-linux-x86_64.tar.bz2
-          echo "Criterion extracted."
-          mv criterion-v2.3.3 criterion
-          echo "Criterion folder renamed."
+          add-apt-repository ppa:snaipewastaken/ppa
+          apt-get update
+          apt-get install criterion-dev
       - name: make
         run: make
       - name: make re
