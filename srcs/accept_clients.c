@@ -35,7 +35,6 @@ static uint32_t accept_and_add_new_client(struct socket_s *socket_controller, st
     clients->sockets[clients->size].fd = accept(socket_controller->fd, (struct sockaddr *)&(clients->sockets[clients->size].address), \
                                                 &(clients->sockets[clients->size].sockaddr_length));
     if (ACCEPT_FAILURE == clients->sockets[clients->size].fd) {
-        PUT_ERROR_MESSAGE(ERROR_FUNCTION("accept()"));
         return FAILURE;
     }
     clients->size += 1;
