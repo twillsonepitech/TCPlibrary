@@ -15,6 +15,7 @@
 
 #define SOCKET_FD   (3 + FD_USED_BY_CRITERION)
 
+
 /**
  *  To execute tests, try `make tests_run 2> logs.out > logs.out ; cat logs.out`
  *  It will first of print messages in error output first in the logs.out file
