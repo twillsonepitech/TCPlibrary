@@ -8,12 +8,13 @@
 #define FAILURE_PORT_2  65539
 
 #ifdef WIN32
-    #define FD_USED_CRITERION   7
+    #define FD_USED_BY_CRITERION    7
 #else
-    #define FD_USED_CRITERION   6
+    #define FD_USED_BY_CRITERION    6
 #endif
 
-#define SOCKET_FD       3 + FD_USED_CRITERION
+#define SOCKET_FD   (3 + FD_USED_BY_CRITERION)
+
 
 /**
  *  To execute tests, try `make tests_run 2> logs.out > logs.out ; cat logs.out`
