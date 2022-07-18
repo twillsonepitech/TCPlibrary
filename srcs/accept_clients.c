@@ -35,6 +35,7 @@ static uint32_t accept_and_add_new_client(struct socket_s *socket_controller, st
     clients->sockets[clients->size].fd = accept(socket_controller->fd, (struct sockaddr *)&(clients->sockets[clients->size].address), \
                                                 &(clients->sockets[clients->size].sockaddr_length));
     if (ACCEPT_FAILURE == clients->sockets[clients->size].fd) {
+        PUT_ERROR_MESSAGE(ERROR_FUNCTION("accept()"));
         return FAILURE;
     }
     clients->size += 1;
@@ -96,8 +97,10 @@ uint32_t accept_new_clients(struct socket_s *socket_controller, struct accepted_
             PUT_ERROR_MESSAGE(ERROR_FUNCTION("select()"));
             return FAILURE;
         }
-        if (FAILURE == accept_and_add_new_client(socket_controller, clients))
-            return FAILURE;
+        if (IS_NOT_SET != FD_ISSET(socket_controller->fd, &set)) {
+            if (FAILURE == accept_and_add_new_client(socket_controller, clients))
+                return FAILURE;
+        }
         if (FAILURE == setup_fd_set_and_timeout(&set, socket_controller->fd, &tv))
             return FAILURE;
         select_ret = select(socket_controller->fd + 1, &set, NULL, NULL, &tv);
