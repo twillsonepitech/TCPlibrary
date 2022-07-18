@@ -1,6 +1,6 @@
 /**
  * @file accept_clients.c
- * @author Emeric Caramanna (emeric.caramanna@epitech.fr)
+ * @author Emeric Caramanna (emeric.caramanna@epitech.eu)
  * @brief Set of fonctions allow new clients to be accepted.
  * @version 0.1
  * @date 2022-07-16
