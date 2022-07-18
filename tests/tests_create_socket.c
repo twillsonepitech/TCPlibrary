@@ -3,10 +3,10 @@
 #include <unistd.h>
 #include "socket.h"
 
-#define SUCCESS_PORT    4242
-#define FAILURE_PORT_1  1023
-#define FAILURE_PORT_2  65539
-#define SOCKET_FD       3 + 6
+#define SUCCESS_PORT    (4242)
+#define FAILURE_PORT_1  (1023)
+#define FAILURE_PORT_2  (65539)
+#define SOCKET_FD       (3)
 
 /**
  *  To execute tests, try `make tests_run 2> logs.out > logs.out ; cat logs.out`
@@ -28,13 +28,8 @@ Test(create_socket_file_descriptor_success, tests_create_data_socket)
         cr_assert_fail("Error to create socket file descriptor");
     }
     cr_assert(SUCCESS == return_from_function);
-    /**
-     * !IMPORTANT! : Emeric si tu vois ce message, lorsque je crée un fd dans le main
-     * le fd == 3, mais dans un test avec criterion, le fd == 9.
-     * (Regarde le fprintf en-dessous avec make tests_run).
-     */
     fprintf(stdout, "Socket fd : %d\n", socket_controller.fd);
-    cr_assert(SOCKET_FD == socket_controller.fd);
+    cr_assert(INVALID_SOCKET != socket_controller.fd && SOCKET_FD <= socket_controller.fd);
     return_from_function = INIT_INT;
     return_from_function = close(socket_controller.fd);
     if (SOCKET_ERROR == return_from_function) {
