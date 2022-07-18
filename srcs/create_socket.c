@@ -16,6 +16,32 @@
 #define SOCK_PROTOCOL   0
 
 /**
+ * @brief Function that initialise the socket_controller and fill it
+ * with the datas that he needs.
+ * 
+ * @param socket_fd The socket fd created by socket function
+ * @param port The port listener
+ * @param address The address of the data socket connexion
+ * @param socket_controller The structure controller
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
+static uint32_t manage_socket_controller_structure(int32_t socket_fd, in_port_t port, struct sockaddr_in *address, struct socket_s *socket_controller)
+{
+    if (NULL == memset(socket_controller, INIT_PTR, sizeof(struct socket_s))) {
+        PUT_ERROR_MESSAGE(ERROR_FUNCTION("memset()"));
+        return FAILURE;
+    }
+    socket_controller->port = port;
+    socket_controller->fd = socket_fd;
+    socket_controller->sockaddr_length = sizeof(address);
+    if (NULL == memcpy(&socket_controller->address, address, sizeof(struct sockaddr_in))) {
+        PUT_ERROR_MESSAGE(ERROR_FUNCTION("memcpy()"));
+        return FAILURE;
+    }
+    return SUCCESS;
+}
+
+/**
  * @brief Set the flags for socket fd object,
  * to make the port and the address reusable.
  * 
@@ -61,7 +87,7 @@ uint32_t create_socket_file_descriptor(in_port_t port, struct socket_s *socket_c
     }
     if (FAILURE == set_flags_for_socket_fd(socket_fd, port, &address))
         return FAILURE;
-    if (FAILURE == initialize_socket_controller(socket_fd, port, &address, socket_controller))
+    if (FAILURE == manage_socket_controller_structure(socket_fd, port, &address, socket_controller))
         return FAILURE;
     return SUCCESS;
 }

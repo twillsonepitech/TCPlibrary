@@ -1,12 +1,12 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include "socket.h"
 
 #define SUCCESS_PORT    (4242)
-#define FAILURE_PORT_1  (1023)
-#define FAILURE_PORT_2  (65539)
 #define SOCKET_FD       (3)
+#define IS_FD_TYPE      (1)
 
 /**
  *  To execute tests, try `make tests_run 2> logs.out > logs.out ; cat logs.out`
@@ -29,35 +29,21 @@ Test(create_socket_file_descriptor_success, tests_create_data_socket)
     }
     cr_assert(SUCCESS == return_from_function);
     fprintf(stdout, "Socket fd : %d\n", socket_controller.fd);
-    cr_assert(INVALID_SOCKET != socket_controller.fd && SOCKET_FD <= socket_controller.fd);
+    return_from_function = INIT_INT;
+    return_from_function = isfdtype(socket_controller.fd, S_IFSOCK);
+    if (INVALID_SOCKET == return_from_function) {
+        cr_assert_fail("Error when looking for if fd is socket");
+        return_from_function = INIT_INT;
+        return_from_function = close(socket_controller.fd);
+        if (SOCKET_ERROR == return_from_function) {
+            cr_assert_fail("Error when closing the data socket fd");
+        }
+    }
+    cr_assert(IS_FD_TYPE == return_from_function);
     return_from_function = INIT_INT;
     return_from_function = close(socket_controller.fd);
     if (SOCKET_ERROR == return_from_function) {
         cr_assert_fail("Error when closing the data socket fd");
     }
     cr_assert(SUCCESS == return_from_function);
-}
-
-Test(create_socket_file_descriptor_failure, tests_port_1)
-{
-    in_port_t port;
-    int32_t return_from_function;
-    struct socket_s socket_controller;
-
-    port = FAILURE_PORT_1;
-    return_from_function = INIT_INT;
-    return_from_function = create_socket_file_descriptor(port, &socket_controller);
-    cr_assert(FAILURE == return_from_function);
-}
-
-Test(create_socket_file_descriptor_failure, tests_port_2)
-{
-    uint32_t port;
-    int32_t return_from_function;
-    struct socket_s socket_controller;
-
-    port = FAILURE_PORT_2;
-    return_from_function = INIT_INT;
-    return_from_function = create_socket_file_descriptor(port, &socket_controller);
-    cr_assert(FAILURE == return_from_function);
 }

@@ -35,7 +35,7 @@ ALL_SRCS	+=	${SRCS}
 
 TESTS_SRCS	:=	${SRCS}
 TESTS_SRCS	+=	${addsuffix .c,									\
-					${addprefix tests/tests_, create_socket}	\
+					${addprefix tests/tests_, create_socket init_listener}	\
 				}												\
 
 OBJS	=	${ALL_SRCS:.c=.o}
