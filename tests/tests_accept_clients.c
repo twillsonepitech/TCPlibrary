@@ -34,9 +34,14 @@ Test(accept_new_clients_no_new_client, tests_select_accept1)
     if (FAILURE == return_from_function) {
         cr_assert_fail("Error to create socket file descriptor");
     }
+    if (FAILURE == bind(socket_controller.fd, (struct sockaddr *)&socket_controller.address, socket_controller.sockaddr_length))
+        cr_assert_fail("Error with bind");
+    if (FAILURE == listen(socket_controller.fd, 128))
+        cr_assert_fail("Error with listen");
+
     return_from_function = INIT_INT;
     return_from_function = accept_new_clients(&socket_controller, &clients);
-    cr_assert(FAILURE == return_from_function);
+    cr_assert(SUCCESS == return_from_function);
     cr_assert(NO_NEW_CLIENT_SIZE == clients.size);
     return_from_function = INIT_INT;
     return_from_function = close(socket_controller.fd);
@@ -44,7 +49,6 @@ Test(accept_new_clients_no_new_client, tests_select_accept1)
         cr_assert_fail("Error when closing the data socket fd");
     }
     cr_assert(SUCCESS == return_from_function);
-
 }
 
 Test(accept_new_clients_invalid_fd, tests_select)
