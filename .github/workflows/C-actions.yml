@@ -30,6 +30,10 @@ jobs:
           sudo add-apt-repository ppa:snaipewastaken/ppa
           sudo apt-get update
           sudo apt-get install criterion-dev
+      - name: Setting up Valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install automake autoconf libtool libsubunit-dev valgrind
       - name: make
         run: make
       - name: make re

@@ -28,16 +28,14 @@ CFLAGS	+=	-fPIC -pedantic
 
 MAIN	=	${addsuffix .c, ${addprefix srcs/, main}}
 SRCS	=	${addsuffix .c,								\
-				${addprefix srcs/, create_socket}	\
-				${addprefix srcs/, accept_clients}	\
+				${addprefix srcs/, create_socket init_listener accept_clients}	\
 			}
 ALL_SRCS	:=	${MAIN}
 ALL_SRCS	+=	${SRCS}
 
 TESTS_SRCS	:=	${SRCS}
 TESTS_SRCS	+=	${addsuffix .c,									\
-					${addprefix tests/tests_, create_socket}	\
-					${addprefix tests/tests_, accept_clients}	\
+					${addprefix tests/tests_, create_socket accept_clients}	\
 				}												\
 
 OBJS	=	${ALL_SRCS:.c=.o}
