@@ -49,7 +49,7 @@
 #define MIN_PORT    1024
 #define MAX_PORT    65534
 
-#define PUT_ERROR_MESSAGE(message)                                          \
+#define PUT_ERROR_MESSAGE(__msg__)                                          \
     do                                                                      \
     {                                                                       \
         fprintf(stderr, "\033[1;31m/************************************/\033[0m\n\n");         \
@@ -58,10 +58,19 @@
         fprintf(stderr, "\033[1;31m[Line : %d]\033[0m", __LINE__);          \
         fprintf(stderr, "\033[1;31m[Function : %s]\033[0m\n", __func__);    \
         fprintf(stderr, "\033[1;31m\tERROR : \033[0m");                       \
-        fprintf(stderr, "\033[1;31m[Message : %s]\033[0m\n\n", message);      \
+        fprintf(stderr, "\033[1;31m[Message : %s]\033[0m\n\n", __msg__);      \
         fprintf(stderr, "\033[1;31m/************************************/\033[0m\n");         \
     } while (LOOP_ONCE);                                                    \
 
+/**
+ * @brief Socket structure that get port listening, server fd
+ * server address and server address length.
+ * 
+ * @param socket_fd The socket fd created by socket function
+ * @param port The port listener
+ * @param address The address of the data socket connexion
+ * @param socket_controller The structure controller
+ */
 struct socket_s {
     in_port_t port;
     int32_t fd;
@@ -69,26 +78,7 @@ struct socket_s {
     struct sockaddr_in address;
 };
 
-/**
- * @brief Create a socket file descriptor object, manage the data socket
- * and fill the socket controller structure that contains the data socket.
- * 
- * @param port The port listener
- * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
- */
 uint32_t create_socket_file_descriptor(in_port_t port, struct socket_s *socket_controller);
-
-/**
- * @brief Initialize listener structure by fill the structure,
- * binding the file descriptor and listening it to manage incoming connexion.
- * 
- * @param socket_fd The socket fd created by socket function
- * @param port The port listener
- * @param address The address of the data socket connexion
- * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
- */
-uint32_t initialize_socket_controller(int32_t socket_fd, in_port_t port, struct sockaddr_in *address, struct socket_s *socket_controller);
+uint32_t initialize_listener(const struct socket_s *socket_controller) __nonnull((1));
 
 #endif /* !SOCKET_H_ */
