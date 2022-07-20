@@ -24,6 +24,15 @@
 #define READ            0
 #define WRITE           1
 
+/**
+ * @brief Fills the given fd_set with the fd from the array of socket_data_s. If the
+ * size field of the structure is at 0 does not add it to the fd_set.
+ * 
+ * @param set fd_set to be filled.
+ * @param data array of socket_data_s containing fd to fill the set.
+ * @param size size of the array.
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
 static uint32_t fill_fd_set(fd_set *set, struct socket_data_s *data, uint32_t size)
 {
     FD_ZERO(set);
@@ -39,6 +48,13 @@ static uint32_t fill_fd_set(fd_set *set, struct socket_data_s *data, uint32_t si
     return SUCCESS;
 }
 
+/**
+ * @brief Determines the highest fd from an array of socket_data_s.
+ * 
+ * @param data array of socket_data_s containing fd to be checked.
+ * @param size size of the array.
+ * @return int32_t the value of the highest fd.
+ */
 static int32_t highest_fd(struct socket_data_s *data, uint32_t size)
 {
     int32_t highest = data[FIRST_ELEMENT].fd;
@@ -49,12 +65,29 @@ static int32_t highest_fd(struct socket_data_s *data, uint32_t size)
     return highest;
 }
 
+/**
+ * @brief Fills the timeval object.
+ * 
+ * @param tv timeval structure to be filled.
+ * @param sec seconds for the given timeval.
+ * @param usec useconds for the given timeval.
+ */
 static void set_timeval(struct timeval *tv, __time_t sec, __suseconds_t usec)
 {
     tv->tv_sec = sec;
     tv->tv_usec = usec;
 }
 
+/**
+ * @brief Called after a select has been done. First checks if there is a
+ * write or read to be performed on the given socket_data_s thanks to FD_ISSET, then
+ * perfoms the desired operation.
+ * 
+ * @param data structure containing the fd, content, and size of content to perform the io.
+ * @param set fd_set to check if the given fd is available for io.
+ * @param io_function a function pointer to either read of write.
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
 static uint32_t check_fd_and_run_io(struct socket_data_s *data, fd_set *set, ssize_t (*io_function)(int, void *, size_t))
 {
     ssize_t io_ret = INIT_INT;
@@ -70,6 +103,16 @@ static uint32_t check_fd_and_run_io(struct socket_data_s *data, fd_set *set, ssi
     return SUCCESS;
 }
 
+/**
+ * @brief Called before doing write or read to check with select if the given fd are
+ * available for the action. 
+ * 
+ * @param data array of socket_data_s containing fd to be checked.
+ * @param size size of the array.
+ * @param set fd_set to be filled and checked.
+ * @param flag flag to determine if a read or write will be done.
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
 static uint32_t set_up_and_select(struct socket_data_s *data, uint32_t size, fd_set *set, uint32_t flag)
 {
     int32_t select_ret;
@@ -93,6 +136,18 @@ static uint32_t set_up_and_select(struct socket_data_s *data, uint32_t size, fd_
     return (uint32_t)select_ret;
 }
 
+/**
+ * @brief Given an array of socket_data_s read_data_from will check if the fd
+ * in the array are available for read, perform the read, store the read data in
+ * the data field of the structure and update the size field of the structure with
+ * the difference between the number of bytes asked and the number of bytes read. If
+ * the field is at 0 everything as been read, if not the read data are incomplete and
+ * you can use the value to know how many bytes are left unread.
+ * 
+ * @param data array of socket_data_s.
+ * @param size size of the array.
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
 uint32_t read_data_from(struct socket_data_s *data, uint32_t size)
 {
     fd_set read_set;
@@ -110,6 +165,17 @@ uint32_t read_data_from(struct socket_data_s *data, uint32_t size)
     return SUCCESS;
 }
 
+/**
+ * @brief Given an array of socket_data_s write_data_to will check if the fd
+ * in the array are available for write, perform the write, and update the size field 
+ * of the structure with the difference between the number of bytes asked and the number 
+ * of bytes written. If the field is at 0 everything as been written, if not the written data are 
+ * incomplete and you can use the value to know how many bytes are left to write.
+ * 
+ * @param data array of socket_data_s.
+ * @param size size of the array.
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ */
 uint32_t write_data_to(struct socket_data_s *data, uint32_t size)
 {
     fd_set write_set;
