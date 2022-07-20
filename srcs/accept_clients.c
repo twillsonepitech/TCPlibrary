@@ -52,9 +52,9 @@ static uint32_t accept_and_add_new_client(struct socket_s *socket_controller, st
  */
 static uint32_t setup_fd_set_and_timeout(fd_set *set, int32_t fd, struct timeval *tv)
 {
-    FD_ZERO(&(*set));
-    FD_SET(fd, &(*set));
-    if (IS_NOT_SET == FD_ISSET(fd, &(*set))) {
+    FD_ZERO(set);
+    FD_SET(fd, set);
+    if (IS_NOT_SET == FD_ISSET(fd, set)) {
         PUT_ERROR_MESSAGE(ERROR_FUNCTION("FD_ISSET()"));
         return FAILURE;
     }
