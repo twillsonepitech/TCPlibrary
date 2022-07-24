@@ -9,11 +9,8 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#include <stdint.h>
 #include <string.h>
 #include "socket.h"
-
-#define SOCK_PROTOCOL   0
 
 /**
  * @brief Function that initialise the socket_controller and fill it
@@ -23,7 +20,7 @@
  * @param port The port listener
  * @param address The address of the data socket connexion
  * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 static uint32_t manage_socket_controller_structure(int32_t socket_fd, in_port_t port, struct sockaddr_in *address, struct socket_s *socket_controller)
 {
@@ -48,7 +45,7 @@ static uint32_t manage_socket_controller_structure(int32_t socket_fd, in_port_t 
  * @param socket_fd The socket fd created by socket function
  * @param port The port listener
  * @param address The address of the data socket connexion
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 static uint32_t set_flags_for_socket_fd(int32_t socket_fd, in_port_t port, struct sockaddr_in *address)
 {
@@ -72,7 +69,7 @@ static uint32_t set_flags_for_socket_fd(int32_t socket_fd, in_port_t port, struc
  * 
  * @param port The port listener
  * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 uint32_t create_socket_file_descriptor(in_port_t port, struct socket_s *socket_controller)
 {
