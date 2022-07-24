@@ -1,3 +1,13 @@
+/**
+ * @file create_socket.c
+ * @author Thomas Willson (thomas.willson@epitech.eu)
+ * @brief Unit tests for create socket function.
+ * @version 0.1
+ * @date 2022-07-14
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>

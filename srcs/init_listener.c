@@ -9,7 +9,6 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#include <stdint.h>
 #include <string.h>
 #include "socket.h"
 #define LISTEN_BACKLOG  50
@@ -19,7 +18,7 @@
  * specified by socket controller address.
  * 
  * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 static uint32_t bind_data_socket(const struct socket_s *socket_controller)
 {
@@ -36,7 +35,7 @@ static uint32_t bind_data_socket(const struct socket_s *socket_controller)
  * of pending connections for the socket controller file descriptor may grow.
  * 
  * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 static uint32_t listen_data_socket(const struct socket_s *socket_controller)
 {
@@ -51,7 +50,7 @@ static uint32_t listen_data_socket(const struct socket_s *socket_controller)
  * @brief Binding the file descriptor and listening it to manage incoming connexion.
  * 
  * @param socket_controller The structure controller
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
+ * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
  */
 uint32_t initialize_listener(const struct socket_s *socket_controller)
 {
