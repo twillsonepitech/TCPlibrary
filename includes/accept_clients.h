@@ -21,6 +21,13 @@
 #define SELECT_FAILURE  -1
 #define ACCEPT_FAILURE  -1
 
+/**
+ * @brief Accepted clients structure gathering all the new
+ * connected and accepted clients.
+ * 
+ * @param sockets The array of sockets fill by the accept_new_clients function.
+ * @param size Size of the array.
+ */
 struct accepted_clients
 {
     struct socket_s *sockets;
