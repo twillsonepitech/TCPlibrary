@@ -14,9 +14,9 @@
 #include <time.h>
 #include "socket.h"
 
-#define SUCCESS_PORT    (4242)
-#define SUCCESS_IP      ("localhost")
-#define FAILURE_IP      ("127.0..0.1")
+#define SUCCESS_PORT        (4242)
+#define SUCCESS_IP          ("localhost")
+#define FAILURE_IP          ("127.0..0.1")
 #define FUNCTION_ERROR_CODE (-1)
 
 Test(client_connection_success, tests_client_connection)
@@ -56,6 +56,7 @@ Test(client_connection_success, tests_client_connection)
         cr_log_error("Error when closing the data socket fd");
     }
     cr_assert(SUCCESS == return_from_function);
+    free(cmd);
 }
 
 Test(client_connection_failure, tests_client_connection)
@@ -92,4 +93,5 @@ Test(client_connection_failure, tests_client_connection)
         cr_log_error("Error when closing the data socket fd");
     }
     cr_assert(SUCCESS == return_from_function);
+    free(cmd);
 }
