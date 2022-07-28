@@ -10,9 +10,13 @@ _BLUE=$'\033[34m
 # END	of Makefile color and typo of messages
 
 CC	?=	gcc
+PY	?=	python3
 
 RM	?=	rm -rf
 
+VALGRIND_SCRIPT_SRC	=	${addsuffix .py, ${addprefix scripts/, valgrind_check}}
+
+LOGS	=	logs.out
 NAME	=	tcp.exe
 STATIC_NAME	=	tcp.a
 BASIC_NAME	=	a.out
@@ -79,7 +83,8 @@ tests_run:	${TESTS_OBJS}
 valgrind:	CFLAGS	+=	-g3
 valgrind:	${TESTS_OBJS}
 	${CC} ${TESTS_LIBS} ${TESTS_OBJS} -o ${TESTS_BIN_NAME}
-	valgrind --trace-children=yes --quiet ./${TESTS_BIN_NAME}
+	valgrind --trace-children=yes ./${TESTS_BIN_NAME} 2> ${LOGS}
+	${PY} ${VALGRIND_SCRIPT_SRC} ${LOGS}
 	${RM} ${TESTS_OBJS}
 	${RM} ${TESTS_BIN_NAME}
 
