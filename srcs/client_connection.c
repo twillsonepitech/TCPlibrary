@@ -12,16 +12,7 @@
 #include <string.h>
 #include "socket.h"
 
-/**
- * @brief Function that allow client to connect on socket controller
- * file descriptor with given address.
- * 
- * @param socket_controller_fd Socket fd opened connection.
- * @param socket_fd Handle return value from `int connect(int __fd, const struct sockaddr *__addr, socklen_t __len)` function.
- * @param address Address that will be set by connect function.
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
- */
-static uint32_t connect_client_to_socket_fd(int32_t socket_controller_fd, struct sockaddr_in address)
+uint32_t connect_client_to_socket_fd(int32_t socket_controller_fd, struct sockaddr_in address)
 {
     int32_t return_from_connect_function;
 
@@ -34,17 +25,7 @@ static uint32_t connect_client_to_socket_fd(int32_t socket_controller_fd, struct
     return SUCCESS;
 }
 
-/**
- * @brief Set the valid network address object using
- * `int inet_pton(int __af, const char *__restrict__ __cp, void *__restrict__ __buf)` function.
- * If network ip address is localhost, the function convert it to 127.0.0.1 to allow
- * inet pton function to work.
- * 
- * @param network_address Network ip address that the client will be connected to.
- * @param address Address that will be fill by inet_pton function (sin_addr variable on structure).
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
- */
-static uint32_t set_valid_network_address(const int8_t *network_address, struct sockaddr_in address)
+uint32_t set_valid_network_address(const int8_t *network_address, struct sockaddr_in address)
 {
     int32_t return_from_inet_pton_function;
 
@@ -61,14 +42,7 @@ static uint32_t set_valid_network_address(const int8_t *network_address, struct 
     return SUCCESS;
 }
 
-/**
- * @brief Init address client that is connecting.
- * 
- * @param port Port listening.
- * @param address Address of client.
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
- */
-static uint32_t init_address(in_port_t port, struct sockaddr_in address)
+uint32_t init_address(in_port_t port, struct sockaddr_in address)
 {
     if (NULL == memset(&address, INIT_PTR, sizeof(struct sockaddr_in))) {
         PUT_ERROR_MESSAGE(ERROR_FUNCTION("memset()"));
@@ -79,17 +53,6 @@ static uint32_t init_address(in_port_t port, struct sockaddr_in address)
     return SUCCESS;
 }
 
-/**
- * @brief Function that handle client connection by setting up the Port and Ip address.
- * Then connect the client on the socket file descriptor created and putted in socket controller
- * by filling the socket connection structure.
- * 
- * @param port Port listening.
- * @param network_address Network ip address.
- * @param socket_controller The socket where a new connection is happenning.
- * @param socket_connection Client socket structure.
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfully
- */
 uint32_t connect_socket_to_address(in_port_t port, const int8_t *network_address, struct socket_s *socket_controller)
 {
     if (FAILURE == init_address(port, socket_controller->address))
