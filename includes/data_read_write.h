@@ -16,6 +16,18 @@
 #include "socket.h"
 
 /**
+ * @brief Enumeration to define the usage of a socket.
+ * This is used to identify which type of action has to be
+ * done when select is used on the socket.
+ * 
+ */
+enum use_e {
+    READING,
+    WRITING,
+    LISTENING
+};
+
+/**
  * @brief structure to be used with the read_data_from and
  * write_data_to functions.
  * @param fd The fd field is the socket file descriptor.
@@ -26,6 +38,8 @@ struct socket_data_s {
     int32_t fd;
     uint32_t size;
     void *data;
+    enum use_e action;
+    uint8_t state;
 };
 
 uint32_t read_data_from(struct socket_data_s *data, uint32_t size);

@@ -68,6 +68,9 @@
         fprintf(stderr, "\033[1;31m/************************************/\033[0m\n");         \
     } while (LOOP_ONCE);                                                    \
 
+#define READY   1
+#define NOT_READY   0
+
 /**
  * @brief Socket structure that get port listening, server fd
  * server address and server address length.
@@ -85,7 +88,7 @@ struct socket_s {
 };
 
 uint32_t create_socket_file_descriptor(in_port_t port, struct socket_s *socket_controller);
-uint32_t initialize_listener(const struct socket_s *socket_controller) __nonnull((1));
+uint32_t initialize_listener(struct socket_s *socket_controller) __nonnull((1));
 
 /**
  * @brief Structure to manage network ip address.

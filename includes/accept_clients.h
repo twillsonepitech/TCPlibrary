@@ -17,24 +17,11 @@
 
 #include "socket.h"
 
-#define IS_NOT_SET      0 
-#define SELECT_FAILURE  -1
 #define ACCEPT_FAILURE  -1
+#define NO_ACCEPT       2
 
-/**
- * @brief Accepted clients structure gathering all the new
- * connected and accepted clients.
- * 
- * @param sockets The array of sockets fill by the accept_new_clients function.
- * @param size Size of the array.
- */
-struct accepted_clients
-{
-    struct socket_s *sockets;
-    uint32_t size;
-};
-
-uint32_t accept_new_clients(struct socket_s *socket_controller, struct accepted_clients *clients);
+uint32_t accept_new_client(struct socket_s *socket_controller, struct socket_s *client, uint8_t state);
+int32_t find_socket_index_from_fd(int32_t fd, struct socket_s *socket_array, uint32_t size);
 
 
 #endif  /* !ACCEPT_CLIENT_H_ */
