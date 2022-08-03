@@ -14,8 +14,7 @@
 #include <stdlib.h>
 #include "accept_clients.h"
 
-#define TIMEVAL_SEC     0
-#define TIMEVAL_USEC    10
+#define NOT_FD  -1
 
 /**
  * @brief Accepts the new incoming connection and stores it in the given 
@@ -25,53 +24,24 @@
  * @param clients The structure containing the array of sockets increasing with each connection.
  * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
  */
-static uint32_t accept_and_add_new_client(struct socket_s *socket_controller, struct accepted_clients *clients)
+static uint32_t accept_and_add_new_client(struct socket_s *socket_controller, struct socket_s *accepted_client)
 {
-    clients->sockets = realloc(clients->sockets, clients->size + 1);
-    if (NULL == clients->sockets) {
-        PUT_ERROR_MESSAGE(ERROR_FUNCTION("realloc()"));
-        return FAILURE;
-    }
-    clients->sockets[clients->size].fd = accept(socket_controller->fd, (struct sockaddr *)&(clients->sockets[clients->size].address), \
-                                                &(clients->sockets[clients->size].sockaddr_length));
-    if (ACCEPT_FAILURE == clients->sockets[clients->size].fd) {
+    accepted_client->fd = accept(socket_controller->fd, (struct sockaddr *)&(accepted_client->address), \
+                                                &(accepted_client->sockaddr_length));
+    if (ACCEPT_FAILURE == accepted_client->fd) {
         PUT_ERROR_MESSAGE(ERROR_FUNCTION("accept()"));
         return FAILURE;
     }
-    clients->size += 1;
     return SUCCESS;
 }
 
-/**
- * @brief Set up the timeout and fd_set with the given fd for an upcoming select.
- * 
- * @param set The fd_set to be initialized.
- * @param fd The fd to be added to the fd_set.
- * @param tv The timeval struct.
- * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
- */
-static uint32_t setup_fd_set_and_timeout(fd_set *set, int32_t fd, struct timeval *tv)
+int32_t find_socket_index_from_fd(int32_t fd, struct socket_s *socket_array, uint32_t size)
 {
-    FD_ZERO(set);
-    FD_SET(fd, set);
-    if (IS_NOT_SET == FD_ISSET(fd, set)) {
-        PUT_ERROR_MESSAGE(ERROR_FUNCTION("FD_ISSET()"));
-        return FAILURE;
+    for (int32_t i = INIT_INT; i < (int32_t)size; i++) {
+        if (fd == socket_array[i].fd)
+            return i;
     }
-    tv->tv_sec = TIMEVAL_SEC;
-    tv->tv_usec = TIMEVAL_USEC;
-    return SUCCESS;
-}
-
-/**
- * @brief A short function to initializa a clean accepted_clients structure.
- * 
- * @param clients The accepted_clients structure to be initialized.
- */
-static void init_new_clients(struct accepted_clients *clients)
-{
-    clients->size = INIT_INT;
-    clients->sockets = NULL;
+    return NOT_FD;
 }
 
 /**
@@ -79,31 +49,14 @@ static void init_new_clients(struct accepted_clients *clients)
  * clients sockets trying to connect to the socket_controller.
  * 
  * @param socket_controller A previously opened socket on which bind() and listen() have been used.
- * @param clients Accepted clients structure to be filled by the call if there are new client connections.
+ * @param client Accepted client structure to be filled by the call if there is new client connection.
  * @return uint32_t FAILURE in case of error / SUCCESS if all has been done successfuly
  */
-uint32_t accept_new_clients(struct socket_s *socket_controller, struct accepted_clients *clients)
+uint32_t accept_new_client(struct socket_s *socket_controller, struct socket_s *client, uint8_t state)
 {
-    fd_set set;
-    struct timeval tv;
-    int32_t select_ret;
-
-    init_new_clients(clients);
-    if (FAILURE == setup_fd_set_and_timeout(&set, socket_controller->fd, &tv))
+    if (state == NOT_READY)
+        return NO_ACCEPT;
+    if (FAILURE == accept_and_add_new_client(socket_controller, client))
         return FAILURE;
-    select_ret = select(socket_controller->fd + 1, &set, NULL, NULL, &tv);
-    while (select_ret) {
-        if (SELECT_FAILURE == select_ret) {
-            PUT_ERROR_MESSAGE(ERROR_FUNCTION("select()"));
-            return FAILURE;
-        }
-        if (IS_NOT_SET != FD_ISSET(socket_controller->fd, &set)) {
-            if (FAILURE == accept_and_add_new_client(socket_controller, clients))
-                return FAILURE;
-        }
-        if (FAILURE == setup_fd_set_and_timeout(&set, socket_controller->fd, &tv))
-            return FAILURE;
-        select_ret = select(socket_controller->fd + 1, &set, NULL, NULL, &tv);
-    }
     return SUCCESS;
 }
