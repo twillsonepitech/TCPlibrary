@@ -88,7 +88,7 @@ struct socket_s {
 };
 
 uint32_t create_socket_file_descriptor(in_port_t port, struct socket_s *socket_controller);
-uint32_t initialize_listener(struct socket_s *socket_controller) __nonnull((1));
+uint32_t initialize_listener(const struct socket_s *socket_controller) __nonnull((1));
 
 /**
  * @brief Structure to manage network ip address.

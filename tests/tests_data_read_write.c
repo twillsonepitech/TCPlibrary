@@ -28,7 +28,9 @@ Test(read_data_from_failure, invalid_file_descriptor)
 
     data.fd = INVALID_VALUE;
     data.size = TESTING_SIZE;
-    return_from_function = read_data_from(&data, SINGLE_ELEMENT);
+    data.action = READING;
+    data.state = READY;
+    return_from_function = read_write_socket(&data, SINGLE_ELEMENT);
     cr_assert(FAILURE == return_from_function);
 }
 
@@ -39,7 +41,9 @@ Test(write_data_to_failure, invalid_file_descriptor)
 
     data.fd = INVALID_VALUE;
     data.size = TESTING_SIZE;
-    return_from_function = write_data_to(&data, SINGLE_ELEMENT);
+    data.action = WRITING;
+    data.state = READY;
+    return_from_function = read_write_socket(&data, SINGLE_ELEMENT);
     cr_assert(FAILURE == return_from_function);
 }
 
@@ -53,7 +57,9 @@ Test(write_data_to_success, message_stdout)
     data.data = strdup(TESTING_STRING);
     if (NULL == data.data)
         cr_log_error("Error when calling strdup function");
-    return_from_function = write_data_to(&data, SINGLE_ELEMENT);
+    data.action = WRITING;
+    data.state = READY;
+    return_from_function = read_write_socket(&data, SINGLE_ELEMENT);
     free(data.data);
     cr_assert(SUCCESS == return_from_function);
     cr_assert(VALID_VALUE == data.size);

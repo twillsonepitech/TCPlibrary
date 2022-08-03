@@ -42,7 +42,6 @@ struct socket_data_s {
     uint8_t state;
 };
 
-uint32_t read_data_from(struct socket_data_s *data, uint32_t size);
-uint32_t write_data_to(struct socket_data_s *data, uint32_t size);
+uint32_t read_write_socket(struct socket_data_s *data, uint32_t size);
 
 #endif /* !DATA_READ_WRITE_H_ */
