@@ -25,8 +25,7 @@ Test(accept_new_clients_no_new_client, tests_select_accept1)
 {
     in_port_t port;
     int32_t return_from_function;
-    struct socket_s socket_controller;
-    struct accepted_clients clients;
+    struct socket_s socket_controller, client;
 
     port = SUCCESS_PORT;
     return_from_function = INIT_INT;
@@ -40,24 +39,22 @@ Test(accept_new_clients_no_new_client, tests_select_accept1)
         cr_log_error("Error when calling listen function");
 
     return_from_function = INIT_INT;
-    return_from_function = accept_new_clients(&socket_controller, &clients);
-    cr_assert(SUCCESS == return_from_function);
-    cr_assert(NO_NEW_CLIENT_SIZE == clients.size);
+    return_from_function = accept_new_client(&socket_controller, &client, NOT_READY);
+    cr_assert(NO_ACCEPT == return_from_function);
     return_from_function = INIT_INT;
     return_from_function = close(socket_controller.fd);
     if (SOCKET_ERROR == return_from_function)
         cr_log_error("Error when calling close function");
-    cr_assert(SUCCESS == return_from_function);
 }
 
 Test(accept_new_clients_invalid_fd, tests_select)
 {
     int32_t return_from_function;
     struct socket_s socket_controller;
-    struct accepted_clients clients;
+    struct socket_s client;
 
     socket_controller.fd = INVALID_FD;
     return_from_function = INIT_INT;
-    return_from_function = accept_new_clients(&socket_controller, &clients);
+    return_from_function = accept_new_client(&socket_controller, &client, READY);
     cr_assert(FAILURE == return_from_function);
 }

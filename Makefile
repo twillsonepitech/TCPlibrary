@@ -28,7 +28,7 @@ CFLAGS	+=	-fPIC -pedantic
 
 MAIN	=	${addsuffix .c, ${addprefix srcs/, main}}
 SRCS	=	${addsuffix .c,								\
-				${addprefix srcs/, create_socket init_listener client_connection accept_clients data_read_write}	\
+				${addprefix srcs/, create_socket init_listener client_connection accept_clients data_read_write selecting}	\
 			}
 ALL_SRCS	:=	${MAIN}
 ALL_SRCS	+=	${SRCS}

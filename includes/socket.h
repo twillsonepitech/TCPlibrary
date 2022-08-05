@@ -68,6 +68,9 @@
         fprintf(stderr, "\033[1;31m/************************************/\033[0m\n");         \
     } while (LOOP_ONCE);                                                    \
 
+#define READY   1
+#define NOT_READY   0
+
 /**
  * @brief Socket structure that get port listening, server fd
  * server address and server address length.
