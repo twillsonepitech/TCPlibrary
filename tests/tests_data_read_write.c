@@ -19,6 +19,7 @@
 #define VALID_VALUE     0
 #define STDOUT          1
 #define TESTING_STRING  "testing\n"
+#define TESTING_SIZE    10
 
 Test(read_data_from_failure, invalid_file_descriptor)
 {
@@ -26,6 +27,7 @@ Test(read_data_from_failure, invalid_file_descriptor)
     struct socket_data_s data;
 
     data.fd = INVALID_VALUE;
+    data.size = TESTING_SIZE;
     return_from_function = read_data_from(&data, SINGLE_ELEMENT);
     cr_assert(FAILURE == return_from_function);
 }
@@ -36,6 +38,7 @@ Test(write_data_to_failure, invalid_file_descriptor)
     struct socket_data_s data;
 
     data.fd = INVALID_VALUE;
+    data.size = TESTING_SIZE;
     return_from_function = write_data_to(&data, SINGLE_ELEMENT);
     cr_assert(FAILURE == return_from_function);
 }
@@ -47,8 +50,11 @@ Test(write_data_to_success, message_stdout)
 
     data.fd = STDOUT;
     data.size = strlen(TESTING_STRING);
-    data.data = malloc(data.size);
+    data.data = strdup(TESTING_STRING);
+    if (NULL == data.data)
+        cr_log_error("Error when calling strdup function");
     return_from_function = write_data_to(&data, SINGLE_ELEMENT);
+    free(data.data);
     cr_assert(SUCCESS == return_from_function);
     cr_assert(VALID_VALUE == data.size);
 }
